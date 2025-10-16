@@ -41,19 +41,6 @@
 
 rm(list = ls()); gc()
 
-# working directory
-
-# WORKING_DIR_PATH <- fs::path("E:/H113038/Ahn/Doctor Mom/")
-#
-# if (fs::dir_exists(WORKING_DIR_PATH)) {
-#   setwd(WORKING_DIR_PATH)
-#   message(sprintf("Successfully set the cwd to %s", WORKING_DIR_PATH))
-# } else {
-#   message(sprintf("%s not exists, please check the directory path.", WORKING_DIR_PATH))
-# }
-
-# setwd(here::here())
-
 # Packages ----------------------------------------------------------------
 
 library(data.table)
@@ -77,16 +64,6 @@ doc_diary <- doc_diary[
     ICD_10, CCS)
 ]
 setorder(doc_diary, DATE, ID)
-
-doc_couple_dot <- readRDS("data/doc_couple_yearly_dot.RDS")
-doc_diary[, BF_YEAR := year(DATE)-1]
-doc_diary[doc_couple_dot, on = c(ID = "ID", BF_YEAR = "YEAR"), DGM := i.DGM]
-doc_diary[, BF_YEAR := NULL]
-
-doc_couple_type <- readRDS("data/doc_couple_type_ear_is_child.RDS")
-doc_diary[, BF_YEAR := year(DATE)-1]
-doc_diary[doc_couple_type, on = c(ID = "ID", BF_YEAR = "YEAR"), COUPLE_TYPE := i.COUPLE_TYPE]
-doc_diary[, BF_YEAR := NULL]
 
 # reproducible sampling
 set.seed(123)
@@ -246,3 +223,4 @@ rm(
   control_sampled, control_panel,
   doc_couple_type
 )
+
