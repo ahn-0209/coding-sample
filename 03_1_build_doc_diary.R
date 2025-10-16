@@ -1,11 +1,39 @@
-#' @title   Build doc_diary panel from raw linked datasets
-#' @author  Chen-An
+#' @title   Build physician-day panel (doc_diary) from linked administrative datasets
+#' @author  Chen-An Lien
 #' @created 2025-05-25
+#' @updated 2025-MM-DD
 #'
 #' @description
-#' This script constructs a daily-level panel of physician parents, merging
-#' outpatient visits, child illness records, marriage and birth records, and hospitalization.
-#' It uses modular utility functions for cleaner logic and easier maintenance.
+#' This script constructs a daily-level physician panel (`doc_diary`) by linking and harmonizing 
+#' multiple administrative datasets on outpatient visits, child illness, hospitalizations, 
+#' physician demographics, and family structure. The resulting dataset traces each physician's 
+#' work activities, parental status, and family-related health events from 2000 to 2022.
+#'
+#' @details
+#' **Inputs**
+#' - `doc_child.rds`: child–parent linkage file identifying doctor-parent households  
+#' - `DOC_PRSN_INFO.rds`: physician demographic information  
+#' - `doc_opdte.rds`: daily outpatient service summaries  
+#' - `doc_child_opdte_list.rds`: outpatient visits of doctors’ children  
+#' - `doc_child_ipdte_daily.rds`: daily child hospitalization records  
+#' - `reference/icd.csv`: ICD9–ICD10 crosswalk table  
+#' - `utils_doc_diary.R`: modular utility functions for tagging and mapping
+#'
+#' **Processing Steps**
+#' 1. Create a full physician–date skeleton (2000–2022).  
+#' 2. Merge outpatient workload summaries to define workdays and practice types.  
+#' 3. Link child illness and inpatient events to tag daily parental caregiving indicators.  
+#' 4. Add demographic attributes, first/last child timing, and spouse identifiers.  
+#' 5. Map ICD codes, tag emergency visits, and adjust for self-child visits.  
+#' 6. Flag physicians’ first active year, hospital affiliation, and multi-hospital workdays.
+#'
+#' **Outputs**
+#' - `doc_diary.rds`: daily-level panel of physicians containing demographics, workload, 
+#'   family status, and child health interactions
+#'
+#' @notes
+#' The resulting panel supports analyses of labor supply, caregiving behavior, and 
+#' work–family tradeoffs among physician households.
 
 # Setups ------------------------------------------------------------------
 rm(list = ls()); gc()
@@ -236,3 +264,4 @@ doc_diary[is.na(N_DOC), N_DOC := 0]
 saveRDS(doc_diary, "data/doc_diary.rds")
 
 rm(list = ls()[!(ls() %in% c("doc_diary"))]); gc()
+
