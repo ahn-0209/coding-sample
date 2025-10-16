@@ -22,7 +22,6 @@ icd <- fread("reference/icd.csv")
 # Load data ---------------------------------------------------------------
 
 doc_child <- readRDS("data/doc_child.rds")
-doc_child <- doc_child[Yr %in% 2000:2022]
 
 doc_prsn_info <- readRDS("data/DOC_PRSN_INFO.rds")
 
@@ -33,14 +32,6 @@ doc_child_opdte <- rbindlist(doc_child_opdte, use.names = T, fill = T)
 doc_child_opdte <- doc_child_opdte[, .(ID, PRSN_ID, HOSP_ID,
                                        FUNC_DATE, CASE_TYPE, FUNC_TYPE,
                                        GAVE_KIND, ICD9CM_1, T_DOT, 
-                                       DATA_YEAR, DATA_MONTH)]
-
-parent_903_opdte <- readRDS("data/parent_903_opdte_list.rds")
-
-parent_903_opdte <- rbindlist(parent_903_opdte, fill = T)
-parent_903_opdte <- parent_903_opdte[, .(ID, PRSN_ID, HOSP_ID,
-                                       FUNC_DATE, CASE_TYPE, FUNC_TYPE,
-                                       GAVE_KIND, ICD9CM_1, T_DOT, PART_NO,
                                        DATA_YEAR, DATA_MONTH)]
 
 doc_child_opdte[, MAIN_CASE_TYPE := {
@@ -69,12 +60,10 @@ doc_opdte <- doc_opdte[, .(PRSN_ID, HOSP_ID, FUNC_DATE,
 
 doc_child_ipdte_daily <- readRDS("data/doc_child_ipdte_daily.rds")
 
-# doc_parent_opdte <- readRDS("data/doc_parent_opdte.rds")
-
 # Generate diary skeleton -------------------------------------------------
 
 doctor_id <- unique(doc_opdte$PRSN_ID)
-dates <- generate_date_seq(start_date = "2000-01-01", end_date = "2021-12-31")
+dates <- generate_date_seq(start_date = "2000-01-01", end_date = "2022-12-31")
 doc_diary <- CJ(ID = doctor_id, DATE = dates)
 doc_diary[, `:=`(
   DATA_YEAR = year(DATE),
@@ -130,33 +119,6 @@ doc_diary[doc_child_opdte, on = c(ID = "ID_F", DATE = "FUNC_DATE"),
             T_DOT_C = i.T_DOT)
 ]
 doc_diary[is.na(SICK_C), SICK_C := 0L]
-
-
-# 903 Visit ---------------------------------------------------------------
-
-parent_903_opdte[doc_child, on = .(ID = ID_M), `:=`(ID_C = i.ID_C)]
-parent_903_opdte[doc_child, on = .(ID = ID_F), `:=`(ID_C = i.ID_C)]
-parent_903_opdte[doc_child, on = .(ID_C = ID_C), `:=`(ID_M = i.ID_M, ID_F = i.ID_F)]
-
-doc_diary[parent_903_opdte, on = c(ID = "ID_M", DATE = "FUNC_DATE"),
-          ":="(
-            SICK_C = 1L,
-            SICK_C_ID = i.ID_C,
-            ICD9CM_1_C = i.ICD9CM_1,
-            CASE_TYPE_C = i.CASE_TYPE,
-            FUNC_TYPE_C = i.FUNC_TYPE,
-            T_DOT_C = i.T_DOT)
-]
-
-doc_diary[parent_903_opdte, on = c(ID = "ID_F", DATE = "FUNC_DATE"),
-          ":="(
-            SICK_C = 1L,
-            SICK_C_ID = i.ID_C,
-            ICD9CM_1_C = i.ICD9CM_1,
-            CASE_TYPE_C = i.CASE_TYPE,
-            FUNC_TYPE_C = i.FUNC_TYPE,
-            T_DOT_C = i.T_DOT)
-]
 
 # ICD Mapping -------------------------------------------------------------
 
@@ -271,6 +233,6 @@ doc_diary[is.na(N_DOC), N_DOC := 0]
 # }
 
 # Optional: save full RDS
-doc_diary <- doc_diary[!is.na(FIRST_C)]
-saveRDS(doc_diary, "data/doc_diary_new.rds")
+saveRDS(doc_diary, "data/doc_diary.rds")
+
 rm(list = ls()[!(ls() %in% c("doc_diary"))]); gc()
