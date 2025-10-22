@@ -1,5 +1,4 @@
 #' @title   Build doctor-parent weekly panel
-#' @author  Chen-An Lien
 #' @created 2025-05-24
 #' @updated 2025-MM-DD
 #'
@@ -81,3 +80,4 @@ saveRDS(doc_opdte, file = "data/doc_opdte.rds")
 # the result is by `ID, FUNC_DATE, HOSP_ID, FUNC_TYPE` to aggregate 
 # in order to calculate the correct daily presentation
 # need to sum up again by ID, FUNC_DATE
+
