@@ -1,5 +1,4 @@
 #' @title   Build physician-day panel (doc_diary) from linked administrative datasets
-#' @author  Chen-An Lien
 #' @created 2025-05-25
 #' @updated 2025-MM-DD
 #'
@@ -264,4 +263,5 @@ doc_diary[is.na(N_DOC), N_DOC := 0]
 saveRDS(doc_diary, "data/doc_diary.rds")
 
 rm(list = ls()[!(ls() %in% c("doc_diary"))]); gc()
+
 
