@@ -1,5 +1,4 @@
 #' @title   Identify doctor-parent children and build OPD visit list
-#' @author  Chen-An Lien
 #' @created 2025-05-25
 #' @updated 2025-MM-DD
 #'
@@ -75,3 +74,4 @@ for (y in 2000:2022) {
 }
 
 fwrite(summary_by_year, "csv/child_parent_number_by_year.csv")
+
