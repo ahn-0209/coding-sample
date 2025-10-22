@@ -1,5 +1,4 @@
 #' @title   Extract IPD records for doctor children and create daily stay panel
-#' @author  Chen-An Lien
 #' @created 2025-05-25
 #' @updated 2025-MM-DD
 #'
@@ -71,4 +70,5 @@ doc_child_ipdte_daily <- rbindlist(daily_list)
 doc_child_ipdte_daily[doc_child, on = c(ID = "ID_C"), `:=`(ID_M = i.ID_M, ID_F = i.ID_F)]
 doc_child_ipdte_daily[, INPATIENT_C := 1]
 saveRDS(doc_child_ipdte_daily, "data/doc_child_ipdte_daily.rds")
+
 
