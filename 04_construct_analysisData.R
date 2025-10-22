@@ -1,5 +1,4 @@
 #' @title   Build analysisData: treated vs. control panels
-#' @author  Chen-An Lien
 #' @created 2025-05-13
 #' @updated 2025-MM-DD
 #'  
@@ -223,4 +222,5 @@ rm(
   control_sampled, control_panel,
   doc_couple_type
 )
+
 
