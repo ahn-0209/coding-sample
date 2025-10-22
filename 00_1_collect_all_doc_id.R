@@ -1,5 +1,4 @@
 #' @title   Compile comprehensive list of practicing doctors across medical systems
-#' @author  Chen-An Lien
 #' @created 2025-05-25
 #' @updated 2025-MM-DD
 #'
@@ -49,5 +48,6 @@ all_doc_id <- unique(all_doc_id)
 all_doc_id <- all_doc_id$PRSN_ID
 
 saveRDS(all_doc_id, "data/all_doc_id.rds")
+
 
 
