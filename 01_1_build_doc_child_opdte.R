@@ -1,5 +1,4 @@
 #' @title   Identify doctor-parent children and build OPD visit list
-#' @author  Chen-An Lien
 #' @created 2025-05-25
 #' @updated 2025-MM-DD
 #'
@@ -78,5 +77,6 @@ doc_child_opdte <- load_child_opdte(
 # doc_child_opdte[, FUNC_DATE := ymd(FUNC_DATE)]
 
 saveRDS(doc_child_opdte, file = "data/doc_child_opdte_list.rds")
+
 
 
